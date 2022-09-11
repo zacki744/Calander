@@ -1,0 +1,172 @@
+body {
+    margin: 8px auto;
+    background: rgb(29, 29, 29);
+    width: 900px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #666;
+}
+  
+li {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+  
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+  
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #111;
+}
+
+footer {
+    background-color: #666;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+}
+
+th {
+    color:whitesmoke;
+    border-bottom: 10px black;
+}
+
+td {
+    color:black;
+    padding: 0.7em;
+    border-style: groove;
+
+}
+
+.right {
+    text-align: right;
+}
+
+.colums {
+    background: rgb(206, 206, 206);
+    
+}
+tr:hover {
+    background-color: rgb(157, 197, 216);
+}
+p {
+    color: white;
+}
+
+h1 {
+    color: white;
+}
+h2 {
+    color: white;
+}
+
+a {
+    color: white;
+}
+
+table {
+    background-color: rgb(29, 29, 29);
+    color:aliceblue;
+}
+
+label {
+    color: white;
+}
+
+.circle {
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    background-color: rgb(44,108,128);
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    }
+    
+    .circle::before {
+      content: "+";
+      height:50px;
+      width:50px;
+      font-size:50px;
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content:center;
+      font-weight:bold;
+      font-family:courier;
+      color:white;
+    }
+
+#hiddenMenue { display:none }
+
+/* Popup container */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+  
+/* The actual popup (appears on top) */
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+}
+  
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+  
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+  
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+  
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+}
+
+.updateLink {
+    color: black;
+}

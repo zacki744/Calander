@@ -1,0 +1,31 @@
+
+<header>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/style/style.css">
+    <link rel="icon" href="/favicon.ico">
+</header>
+<h1>DELETE entery</h1>
+<div>
+    <form method="post">
+        <label for="f_id"> id</label><br>
+        <input id="f_id" type="number" name="f_id" value="<%= obj[0].id %>" readonly><br>
+
+        <label for="f_Description"> Description</label><br>
+        <input id="f_Description" type="text" name="f_Description" value="<%= obj[0].Description %>"><br>
+
+        <label for="f_StartingTime">Starting Time</label><br>
+        <input id="f_StartingTime" type="datetime-local" name="f_StartingTime" value="<%= obj[0].start %>"><br>
+
+        <label for="f_Deadline">Deadline</label><br>
+        <input id="f_Deadline" type="datetime-local" name="f_Deadline" value="<%= obj[0].end %>"><br>
+
+        <label for="f_EstimatedDuration">Estimated Duration</label><br>
+        <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" value="<%= obj[0].EstimatedDuration %>"><br> 
+
+        <label for="f_ActualDuration">Actual Duration</label><br>
+        <input id="f_ActualDuration" type="number" name="f_ActualDuration" value="<%= obj[0].ActualDuration %>"><br><br>
+        <input type="submit" value="Submit" onclick="window.open('', '_self', ''); window.close();">        
+
+    </form>
+</div>
+<br>

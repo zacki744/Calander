@@ -1,0 +1,72 @@
+<%- include("header", {title: title}); %>
+
+<h2><i></i>A summery of all of your aktivites<i></i></h2>
+
+<% for (const row of res) {%>
+    <div>
+        <table>
+            <tr>
+                <th> Id </th>
+                <th> Description </th>
+                <th> Starting Time </th>
+                <th> Deadline </th>
+                <th> Estimated Duration </th>
+                <th> Actual Duration </th>
+            </tr>
+            <tr class="colums">
+                <td><%= row.id %></td>
+                <td><%= row.Description %></td>
+                <td><%= row.start %></td>
+                <td><%= row.end %></td>
+                <td><%= row.EstimatedDuration %></td>
+                <td><%= row.ActualDuration %></td>
+                <td>
+                    <a href="/calendar/update/<%= row.id %>" class="updateLink">Update</a>
+                </td>
+                <td>
+                    <div class="popup" onclick="myFunction('<%= row.id %>')" method="post">Delete
+                        <span class="popuptext" id="myPopup_<%= row.id %>"><a href="/calendar/delete/<%= row.id %>" method="post">Are you sertin?</a></span>
+                    </div>
+                </td>            
+            </tr>
+        </table>
+    </div>
+<% }; %>
+<div>
+    <form method="post" id="hiddenMenue">
+        <label for="f_Description"> Description</label><br>
+        <input id="f_Description" type="text" name="f_Description"><br>
+
+        <label for="f_StartingTime">Starting Time</label><br>
+        <input id="f_StartingTime" type="datetime-local" name="f_StartingTime"><br>
+
+        <label for="f_Deadline">Deadline</label><br>
+        <input id="f_Deadline" type="datetime-local" name="f_Deadline"><br>
+
+        <label for="f_EstimatedDuration">Estimated Duration</label><br>
+        <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration"><br> 
+
+        <label for="f_ActualDuration">Actual Duration</label><br>
+        <input id="f_ActualDuration" type="number" name="f_ActualDuration"><br><br>
+        <input type="submit" value="Submit">
+
+    </form>
+</div>
+<br>
+<button class="circle" type="button" onclick="CreateColumn()"></button>
+<br>
+
+
+<%- include("footer"); %>
+
+<script language="javascript">
+    function CreateColumn()
+    {
+        document.getElementById("hiddenMenue").style.display="block";
+    }
+    function myFunction(id) {
+        let theId = "myPopup_" + id;
+        var popup = document.getElementById(theId);
+        popup.classList.toggle("show");
+      }
+</script>

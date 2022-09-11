@@ -1,0 +1,74 @@
+<style>
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #666;
+    margin: 8px auto;
+    width: 900px;
+}
+  
+li {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+  
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+  
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #111;
+}
+</style>
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <title><%= title %></title>
+  <link rel="icon" href="/favicon.ico">
+
+  <ul>
+      <li><a href="/calendar/Home">Home</a></li>
+      <li><a href="/calendar/pipeline">Pipeline</a></li>
+      <li><a href="/eshop/category">Export</a></li>
+      <li><a href="/eshop/create">Completed</a></li>
+
+  </ul>
+<script src="https://cdn.anychart.com/releases/8.6.0/js/anychart-core.min.js"> </script> 
+<script src ="https://cdn.anychart.com/releases/8.6.0/js/anychart-gantt.min.js"></script>
+</head>
+<body onload="myfunc('<%= obj[0] %>')"><br>
+<div id = "container" > </div><br>
+
+<script>
+function myfunc(data) {
+	// create a data tree
+  console.log(data);
+	var treeData = anychart.data.tree(data, "as-tree");
+
+	// create a chart
+	var chart = anychart.ganttProject();
+  chart.rowHoverFill("#ffd54f 0.3");
+
+	// set the data
+	chart.data(treeData);
+	// configure the scale
+	chart.getTimeline().scale().maximum(Date.UTC(2018, 06, 30));
+	// set the container id
+	chart.container("container");
+	// initiate drawing the chart
+	chart.draw();
+	// fit elements to the width of the timeline
+	chart.fitAll();
+};
+</script>
+</body>
+</html>
+<%- include("footer"); %>
