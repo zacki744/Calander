@@ -11,7 +11,6 @@
                 <th> Starting Time </th>
                 <th> Deadline </th>
                 <th> Estimated Duration </th>
-                <th> Actual Duration </th>
             </tr>
             <tr class="colums">
                 <td><%= row.id %></td>
@@ -19,7 +18,6 @@
                 <td><%= row.start %></td>
                 <td><%= row.end %></td>
                 <td><%= row.EstimatedDuration %></td>
-                <td><%= row.ActualDuration %></td>
                 <td>
                     <a href="/calendar/update/<%= row.id %>" class="updateLink">Update</a>
                 </td>
@@ -27,13 +25,17 @@
                     <div class="popup" onclick="myFunction('<%= row.id %>')" method="post">Delete
                         <span class="popuptext" id="myPopup_<%= row.id %>"><a href="/calendar/delete/<%= row.id %>" method="post">Are you sertin?</a></span>
                     </div>
-                </td>            
+                </td>
+                <td>
+                    <a href="/calendar/complete/<%= row.id %>" class="updateLink" method="post">Complete</a>
+                </td>
+            </td> 
             </tr>
         </table>
     </div>
 <% }; %>
 <div>
-    <form method="post" id="hiddenMenue">
+    <form method="post" action="/calendar/Home" id="hiddenMenue">
         <label for="f_Description"> Description</label><br>
         <input id="f_Description" type="text" name="f_Description"><br>
 
@@ -68,5 +70,5 @@
         let theId = "myPopup_" + id;
         var popup = document.getElementById(theId);
         popup.classList.toggle("show");
-      }
+    }
 </script>

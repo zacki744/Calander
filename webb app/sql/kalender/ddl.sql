@@ -164,4 +164,59 @@ BEGIN
 	FROM  `kalender`.`taskManager`;
 END
 ;;
-DELIMITER ; 
+DELIMITER ;
+
+--
+-- returns all of complete formated 
+--
+DROP PROCEDURE IF EXISTS SELECT_ALL_COMPLETE;
+DELIMITER ;;
+
+CREATE PROCEDURE SELECT_ALL_COMPLETE()
+BEGIN
+	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
+    start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
+    Description, id, EstimatedDuration, ActualDuration 
+	FROM  `kalender`.`completed`;
+END
+;;
+DELIMITER ;
+
+--
+-- MOVES A OBJECT TO COMPLETE
+--
+DROP PROCEDURE IF EXISTS COMPLETE_OBJ;
+DELIMITER ;;
+
+CREATE PROCEDURE COMPLETE_OBJ
+(
+	_ID INT
+)
+BEGIN
+	INSERT INTO `kalender`.`completed` SELECT * FROM `kalender`.`taskManager` WHERE _ID = `id`;
+    DELETE FROM `kalender`.`taskManager` WHERE _ID = `id`;
+END
+;;
+DELIMITER ;
+
+--
+-- serch
+--
+DROP PROCEDURE IF EXISTS serch;
+DELIMITER ;;
+
+CREATE PROCEDURE serch
+(
+	Serchterm VARCHAR(45)
+)
+BEGIN
+	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
+    start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
+    Description, id, EstimatedDuration, ActualDuration 
+	FROM  `kalender`.`taskManager` WHERE '%' + Serchterm + '%' IN (id, Description);
+END
+;;
+DELIMITER ;
+
+
+

@@ -3,14 +3,19 @@
 */
 "use strict";
 module.exports = {
-    findAllInTable: findAllInTable,
-    showCategorys:  showCategorys,
-    findAllInTableGant: findAllInTableGant,
-    showCategorysGant:  showCategorysGant,
-    insertItem:     insertItem,
-    getOne:         getOne,
-    UpdateItem:     UpdateItem,
-    deleteItem:     deleteItem,
+    findAllInTable:         findAllInTable,
+    showCategorys:          showCategorys,
+    findAllInTableGant:     findAllInTableGant,
+    showCategorysGant:      showCategorysGant,
+    findAllInTableComplete: findAllInTableComplete,
+    showCategorysComplete:  showCategorysComplete,
+    insertItem:             insertItem,
+    getOne:                 getOne,
+    UpdateItem:             UpdateItem,
+    deleteItem:             deleteItem,
+    Complete:               Complete,
+    Serch:                  Serch,
+    serchQuery:             serchQuery
 };
 
 const mysql  = require("promise-mysql");
@@ -107,5 +112,43 @@ async function findAllInTableGant() {
     let res;
 
     res = await db.query(sql);
+    return res[0];
+}
+
+async function showCategorysComplete() {
+    return findAllInTableComplete();
+}
+/**
+* Show all entries in the selected table.
+*
+* @async
+* @param {string} table A valid table name.
+*
+* @returns {RowDataPacket} Resultset from the query.
+*/
+async function findAllInTableComplete() {
+    let sql = 'CALL `kalender`.SELECT_ALL_COMPLETE();';
+    let res;
+
+    res = await db.query(sql);
+    return res[0];
+}
+
+async function Complete(id) {
+    let sql = "CALL `kalender`.COMPLETE_OBJ('?');";
+    let res;
+
+    res = await db.query(sql, [parseInt(id)]);
+}
+
+async function Serch(param) {
+    return serchQuery(param)
+}
+
+async function serchQuery(param) {
+    let sql = "CALL `kalender`.serch(?);";
+    let res;
+
+    res = await db.query(sql, [param]);
     return res[0];
 }

@@ -23,4 +23,5 @@ VALUES ("ksudkfgb", now(), now(), 12, 13);
 
 INSERT INTO `kalender`.`taskManager` (Description, StartingTime, Deadline, EstimatedDuration, ActualDuration)
 VALUES ("ksudkfgb", now(), now(), 12, 13);
-SELECT * FROM `kalender`.`taskManager`;
+SELECT * FROM `kalender`.`taskManager` where id = 1;
+

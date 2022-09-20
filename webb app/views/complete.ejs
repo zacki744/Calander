@@ -1,0 +1,49 @@
+<%- include("header", {title: title}); %>
+
+<h2><i></i>A summery of all of your completed aktivites<i></i></h2>
+<style>
+    td {
+        background-color: green;
+        
+    }
+    tr:hover {
+        background-color: rgb(29, 29, 29);
+    }
+</style>
+<% for (const row of res) {%>
+    <div>
+        <table>
+            <tr>
+                <th> Id </th>
+                <th> Description </th>
+                <th> Starting Time </th>
+                <th> Deadline </th>
+                <th> Estimated Duration </th>
+                <th> Actual Duration </th>
+            </tr>
+            <tr class="colums">
+                <td><%= row.id %></td>
+                <td><%= row.Description %></td>
+                <td><%= row.start %></td>
+                <td><%= row.end %></td>
+                <td><%= row.EstimatedDuration %></td>
+                <td><%= row.ActualDuration %></td>
+                <td>
+                    <div class="popup" onclick="myFunction('<%= row.id %>')" method="post">Delete
+                        <span class="popuptext" id="myPopup_<%= row.id %>"><a href="/calendar/delete/<%= row.id %>" method="post">Are you sertin?</a></span>
+                    </div>
+                </td>            
+            </tr>
+        </table>
+    </div>
+<% }; %>
+<br>
+<%- include("footer"); %>
+
+<script language="javascript">
+    function myFunction(id) {
+        let theId = "myPopup_" + id;
+        var popup = document.getElementById(theId);
+        popup.classList.toggle("show");
+      }
+</script>

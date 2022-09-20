@@ -13,13 +13,34 @@ router.get("/Home", async (req, res) => {
     data.res = await calender.showCategorys()
     res.render("home", data);
 });
+
+router.get("/serch", async (req, res) => {
+    let data= {
+        title: "index"
+    };
+
+    console.log(req.url.split('=')[1])
+    data.res = await calender.Serch(req.url.split('=')[1])
+    res.render("home", data);
+});
+
+router.get("/complete", async (req, res) => {
+    let data= {
+        title: "index"
+    };
+
+    data.res = await calender.showCategorysComplete()
+    res.render("complete", data);
+});
+
 router.get("/", async (req, res) => {
     let data= {
         title: "index"
     };
 
     data.res = await calender.showCategorys()
-    res.render("home", data);});
+    res.render("home", data);}
+);
 
 router.post("/Home", async (req, res) => {
     let data= {
@@ -31,6 +52,7 @@ router.post("/Home", async (req, res) => {
     res.render("home", data);
 });
 
+
 router.get("/update/:id", async (req, res) => {
     let data = {
         title: "Update"
@@ -39,6 +61,17 @@ router.get("/update/:id", async (req, res) => {
     data.obj = await calender.getOne(req.params.id);
     res.render("update.ejs", data);
 });
+
+router.get("/complete/:id", async (req, res) => {
+    let data = {
+        title: "Update"
+    };
+
+    await calender.Complete(req.params.id);
+    data.res = await calender.showCategorysComplete();
+    res.render("complete", data);
+});
+
 
 router.post("/update/:id", async (req, res) => {
     await calender.UpdateItem(req.body);
