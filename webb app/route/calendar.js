@@ -97,6 +97,7 @@ router.get("/pipeline", async (req, res) => {
     };
     
     data.obj = await calender.showCategorysGant();
+    console.log(data.obj)
     res.render("pipeline", data);
 });
 

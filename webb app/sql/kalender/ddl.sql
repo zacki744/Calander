@@ -164,7 +164,7 @@ CREATE PROCEDURE SELECT_ALL_for_gant()
 BEGIN
 	SELECT 
     id,
-    Description AS name, 
+    Title AS name, 
     DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS actualStart, 
     DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS actualEnd
 	FROM  `kalender`.`taskManager`;

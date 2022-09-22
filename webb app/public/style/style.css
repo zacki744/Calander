@@ -177,7 +177,21 @@ label {
     float: right;
   }
   
-  input[type=text] {
+input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+}
+
+input[type=number] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+}
+
+input[type=datetime-local] {
     padding: 6px;
     margin-top: 8px;
     font-size: 17px;

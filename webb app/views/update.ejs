@@ -12,26 +12,26 @@
 <h1>Update entery</h1>
 <div>
     <form method="post">
-        <label for="f_id"> Title</label><br>
+        <label for="f_id"> id</label><br>
         <input id="f_id" type="number" name="f_id" value="<%= obj[0].id %>" readonly><br>
 
         <label for="f_Title"> Title</label><br>
-        <input id="f_Title" type="text" name="f_Title" value="<%= obj[0].Title %>"><br>
+        <input id="f_Title" type="text" name="f_Title" value="<%= obj[0].Title %>" required><br>
 
         <label for="f_Category">Actual Duration</label><br>
-        <input id="f_Category" type="text" name="f_Category" value="<%= obj[0].Category %>"><br>
+        <input id="f_Category" type="text" name="f_Category" value="<%= obj[0].Category %>" required><br>
 
         <label for="f_Description"> Description</label><br>
-        <input id="f_Description" type="text" name="f_Description" value="<%= obj[0].Description %>"><br>
+        <input id="f_Description" type="text" name="f_Description" value="<%= obj[0].Description %>" required><br>
 
         <label for="f_StartingTime">Starting Time</label><br>
-        <input id="f_StartingTime" type="datetime-local" name="f_StartingTime" value="<%= obj[0].start %>"><br>
+        <input id="f_StartingTime" type="datetime-local" name="f_StartingTime" value="<%= obj[0].start %>" required><br>
 
         <label for="f_Deadline">Deadline</label><br>
-        <input id="f_Deadline" type="datetime-local" name="f_Deadline" value="<%= obj[0].end %>"><br>
+        <input id="f_Deadline" type="datetime-local" name="f_Deadline" value="<%= obj[0].end %>" required><br>
 
         <label for="f_EstimatedDuration">Estimated Duration</label><br>
-        <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" value="<%= obj[0].EstimatedDuration %>"><br> 
+        <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" value="<%= obj[0].EstimatedDuration %>" required><br> 
         <br>
         <input type="submit" value="Submit">        
 
