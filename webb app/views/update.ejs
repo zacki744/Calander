@@ -12,8 +12,14 @@
 <h1>Update entery</h1>
 <div>
     <form method="post">
-        <label for="f_id"> id</label><br>
+        <label for="f_id"> Title</label><br>
         <input id="f_id" type="number" name="f_id" value="<%= obj[0].id %>" readonly><br>
+
+        <label for="f_Title"> Title</label><br>
+        <input id="f_Title" type="text" name="f_Title" value="<%= obj[0].Title %>"><br>
+
+        <label for="f_Category">Actual Duration</label><br>
+        <input id="f_Category" type="text" name="f_Category" value="<%= obj[0].Category %>"><br>
 
         <label for="f_Description"> Description</label><br>
         <input id="f_Description" type="text" name="f_Description" value="<%= obj[0].Description %>"><br>
@@ -26,9 +32,7 @@
 
         <label for="f_EstimatedDuration">Estimated Duration</label><br>
         <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" value="<%= obj[0].EstimatedDuration %>"><br> 
-
-        <label for="f_ActualDuration">Actual Duration</label><br>
-        <input id="f_ActualDuration" type="number" name="f_ActualDuration" value="<%= obj[0].ActualDuration %>"><br><br>
+        <br>
         <input type="submit" value="Submit">        
 
     </form>

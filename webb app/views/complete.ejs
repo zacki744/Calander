@@ -1,4 +1,25 @@
-<%- include("header", {title: title}); %>
+<!doctype html>
+
+
+<header>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style/style.css">
+    <link rel="icon" href="/favicon.ico">
+
+    <ul>
+        <li><a href="/calendar/Home">Home</a></li>
+        <li><a href="/calendar/pipeline">Pipeline</a></li>
+        <li><a href="/calendar/category">Export</a></li>
+        <li><a href="/calendar/complete">Completed</a></li>
+        <div class="search-container">
+            <form action="/calendar/complete/serch">
+              <input type="text" placeholder="Search.." name="search">
+              <button type="submit">Search</button>
+            </form>
+        </div>
+    </ul>
+</header>
 
 <h2><i></i>A summery of all of your completed aktivites<i></i></h2>
 <style>
@@ -14,15 +35,17 @@
     <div>
         <table>
             <tr>
-                <th> Id </th>
+                <th> Title </th>
+                <th> Category </th>
                 <th> Description </th>
                 <th> Starting Time </th>
                 <th> Deadline </th>
                 <th> Estimated Duration </th>
-                <th> Actual Duration </th>
+                <th> ActualDuration </th>
             </tr>
             <tr class="colums">
-                <td><%= row.id %></td>
+                <td><%= row.Title %></td>
+                <td><%= row.Category %></td>
                 <td><%= row.Description %></td>
                 <td><%= row.start %></td>
                 <td><%= row.end %></td>

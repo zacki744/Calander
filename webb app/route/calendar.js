@@ -7,35 +7,43 @@ const router  = express.Router();
 // Add a route for the path /home
 router.get("/Home", async (req, res) => {
     let data= {
-        title: "index"
+        title: "Home"
     };
 
     data.res = await calender.showCategorys()
     res.render("home", data);
 });
 
-router.get("/serch", async (req, res) => {
+router.get("/Home/serch", async (req, res) => {
     let data= {
-        title: "index"
+        title: "Home"
     };
 
-    console.log(req.url.split('=')[1])
     data.res = await calender.Serch(req.url.split('=')[1])
     res.render("home", data);
 });
 
 router.get("/complete", async (req, res) => {
     let data= {
-        title: "index"
+        title: "complete"
     };
 
     data.res = await calender.showCategorysComplete()
     res.render("complete", data);
 });
 
+router.get("/complete/serch", async (req, res) => {
+    let data= {
+        title: "complete"
+    };
+
+    data.res = await calender.SerchComplete(req.url.split('=')[1])
+    res.render("complete", data);
+});
+
 router.get("/", async (req, res) => {
     let data= {
-        title: "index"
+        title: "Home"
     };
 
     data.res = await calender.showCategorys()
@@ -44,7 +52,7 @@ router.get("/", async (req, res) => {
 
 router.post("/Home", async (req, res) => {
     let data= {
-        title: "index"
+        title: "Home"
     };
 
     await calender.insertItem(req.body);
@@ -64,7 +72,7 @@ router.get("/update/:id", async (req, res) => {
 
 router.get("/complete/:id", async (req, res) => {
     let data = {
-        title: "Update"
+        title: "complete"
     };
 
     await calender.Complete(req.params.id);
@@ -89,7 +97,6 @@ router.get("/pipeline", async (req, res) => {
     };
     
     data.obj = await calender.showCategorysGant();
-    
     res.render("pipeline", data);
 });
 

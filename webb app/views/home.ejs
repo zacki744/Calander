@@ -6,14 +6,16 @@
     <div>
         <table>
             <tr>
-                <th> Id </th>
+                <th> Title </th>
+                <th> Category </th>
                 <th> Description </th>
                 <th> Starting Time </th>
                 <th> Deadline </th>
                 <th> Estimated Duration </th>
             </tr>
             <tr class="colums">
-                <td><%= row.id %></td>
+                <td><%= row.Title %></td>
+                <td><%= row.Category %></td>
                 <td><%= row.Description %></td>
                 <td><%= row.start %></td>
                 <td><%= row.end %></td>
@@ -36,6 +38,13 @@
 <% }; %>
 <div>
     <form method="post" action="/calendar/Home" id="hiddenMenue">
+        
+        <label for="f_Title"> Title</label><br>
+        <input id="f_Title" type="text" name="f_Title"><br>
+
+        <label for="f_Category"> Category</label><br>
+        <input id="f_Category" type="text" name="f_Category"><br>
+
         <label for="f_Description"> Description</label><br>
         <input id="f_Description" type="text" name="f_Description"><br>
 
@@ -47,10 +56,8 @@
 
         <label for="f_EstimatedDuration">Estimated Duration</label><br>
         <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration"><br> 
-
-        <label for="f_ActualDuration">Actual Duration</label><br>
-        <input id="f_ActualDuration" type="number" name="f_ActualDuration"><br><br>
-        <input type="submit" value="Submit">
+        <br>
+        <input type="submit" value="Add">
 
     </form>
 </div>

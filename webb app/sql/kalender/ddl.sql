@@ -28,16 +28,19 @@ DROP TABLE IF EXISTS `kalender`.`taskManager` ;
 
 CREATE TABLE IF NOT EXISTS `kalender`.`taskManager` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `Title` VARCHAR(45) NULL,
+  `Category` VARCHAR(45) NULL,
   `Description` VARCHAR(45) NULL,
   `StartingTime` DATETIME NULL,
   `Deadline` DATETIME NULL,
   `EstimatedDuration` INT NULL,
-  `ActualDuration` INT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `kalender`.`completed` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `Title` VARCHAR(45) NULL,
+  `Category` VARCHAR(45) NULL,
   `Description` VARCHAR(45) NULL,
   `StartingTime` DATETIME NULL,
   `Deadline` DATETIME NULL,
@@ -58,14 +61,15 @@ DELIMITER ;;
 CREATE PROCEDURE `kalender`.`insertInto`
 (
 	`f_Description`  VARCHAR(45),
+    `f_Title` VARCHAR(45),
+    `f_Category` VARCHAR(45),
     `f_StartingTime` DATETIME,
     `f_Deadline` DATETIME,
-    `f_EstimatedDuration` INT,
-    `f_ActualDuration` INT
+    `f_EstimatedDuration` INT
 )
 BEGIN
-	INSERT INTO `kalender`.`taskManager` (`Description`, `StartingTime`, `Deadline`, `EstimatedDuration`, `ActualDuration`)
-	values(`f_Description`, `f_StartingTime` ,`f_Deadline`, `f_EstimatedDuration`, `f_ActualDuration`);
+	INSERT INTO `kalender`.`taskManager` (`Description`, `StartingTime`, `Deadline`, `EstimatedDuration`, `Category`, `Title`)
+	values(`f_Description`, `f_StartingTime` ,`f_Deadline`, `f_EstimatedDuration`, `f_Category`, `f_Title`);
         
 END
 ;;
@@ -84,7 +88,7 @@ _id INT
 BEGIN
 	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
     start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
-    Description, id, EstimatedDuration, ActualDuration 
+    Description, id, EstimatedDuration, Title, Category 
 	FROM  `kalender`.`taskManager` WHERE `id` = _id;
 END
 ;;
@@ -100,7 +104,7 @@ CREATE PROCEDURE SELECT_ALL()
 BEGIN
 	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
     start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
-    Description, id, EstimatedDuration, ActualDuration 
+    Description, id, EstimatedDuration, Title, Category  
 	FROM  `kalender`.`taskManager`;
 END
 ;;
@@ -115,17 +119,19 @@ CREATE PROCEDURE `kalender`.`uppdate_objekt`
 (
 	`f_id` INT,
 	`f_Description`  VARCHAR(45),
+    `f_Title` VARCHAR(45),
+    `f_Category` VARCHAR(45),
     `f_StartingTime` DATETIME,
     `f_Deadline` DATETIME,
-    `f_EstimatedDuration` INT,
-    `f_ActualDuration` INT
+    `f_EstimatedDuration` INT
 )
 BEGIN
 	UPDATE `kalender`.`taskManager` SET `Description` = `f_Description`,
     `StartingTime` = `f_StartingTime`,
     `Deadline` = `f_Deadline`,
     `EstimatedDuration` = `f_EstimatedDuration`,
-    `ActualDuration` = `f_ActualDuration`
+    `Title` = `f_Title`,
+	`Category` = `f_Category`
     WHERE
 		`id` = `f_id`;
         
@@ -176,7 +182,7 @@ CREATE PROCEDURE SELECT_ALL_COMPLETE()
 BEGIN
 	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
     start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
-    Description, id, EstimatedDuration, ActualDuration 
+    Description, id, EstimatedDuration, ActualDuration, Title, Category
 	FROM  `kalender`.`completed`;
 END
 ;;
@@ -190,10 +196,21 @@ DELIMITER ;;
 
 CREATE PROCEDURE COMPLETE_OBJ
 (
-	_ID INT
+	_ID INT,
+    f_actualduration INT
 )
 BEGIN
-	INSERT INTO `kalender`.`completed` SELECT * FROM `kalender`.`taskManager` WHERE _ID = `id`;
+	INSERT INTO `kalender`.`completed` (
+		`id`, 
+		`Title`, 
+		`Category`,
+		`Description`,
+		`StartingTime`,
+		`Deadline`,
+		`EstimatedDuration`
+	) 
+	SELECT * FROM `kalender`.`taskManager` WHERE _ID = `id`;
+	UPDATE `kalender`.`completed` SET `ActualDuration` = f_actualduration WHERE _ID = `id`;
     DELETE FROM `kalender`.`taskManager` WHERE _ID = `id`;
 END
 ;;
@@ -212,8 +229,27 @@ CREATE PROCEDURE serch
 BEGIN
 	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
     start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
-    Description, id, EstimatedDuration, ActualDuration 
-	FROM  `kalender`.`taskManager` WHERE '%' + Serchterm + '%' IN (id, Description);
+    Description, id, EstimatedDuration, Title, Category 
+	FROM  `kalender`.`taskManager` WHERE  (Title = Serchterm OR Category = Serchterm OR Description = Serchterm);
+END
+;;
+DELIMITER ;
+
+--
+-- serch completed
+--
+DROP PROCEDURE IF EXISTS serch_completed;
+DELIMITER ;;
+
+CREATE PROCEDURE serch_completed
+(
+	Serchterm VARCHAR(45)
+)
+BEGIN
+	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
+    start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
+    Description, id, EstimatedDuration, Title, Category 
+	FROM  `kalender`.`completed` WHERE  (Title = Serchterm OR Category = Serchterm OR Description = Serchterm);
 END
 ;;
 DELIMITER ;
