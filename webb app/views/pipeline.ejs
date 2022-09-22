@@ -1,6 +1,10 @@
 
 <!doctype html>
-
+<style>
+  div {
+    height: 40em;
+  }
+</style>
 
 <header>
     <meta charset="utf-8">
@@ -20,9 +24,9 @@
 <script src ="https://cdn.anychart.com/releases/8.6.0/js/anychart-gantt.min.js"></script>
 </head>
 <p id="the_data" hidden><%= JSON.stringify(obj) %></p>
-<body><br>
-<div id = "container" > </div><br>
-
+<body><br><br>
+<div id = "container" ></div><br>
+<br>
 <script>
   anychart.onDocumentReady(function () {
     const elem = document.getElementById('the_data').innerHTML;
