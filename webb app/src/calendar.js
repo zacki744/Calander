@@ -159,11 +159,12 @@ async function Serch(param) {
 }
 
 async function serchQuery(param) {
+    let serchterm = '%' + param + '%';
     let sql = "CALL `kalender`.serch(?);";
     let res;
 
-    console.log(param)
-    res = await db.query(sql, [param]);
+    console.log(serchterm)
+    res = await db.query(sql, [serchterm]);
     return res[0];
 }
 
@@ -189,10 +190,11 @@ async function SerchComplete(param) {
 }
 
 async function SerchCompleteQuery(param) {
+    let serchterm = '%' + param + '%';
     let sql = "CALL `kalender`.serch_completed(?);";
     let res;
 
     console.log(param)
-    res = await db.query(sql, [param]);
+    res = await db.query(sql, [serchterm]);
     return res[0];
 }

@@ -1,45 +1,21 @@
-<style>
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #666;
-    margin: 8px auto;
-    width: 900px;
-}
-  
-li {
-    float: left;
-    border-right: 1px solid #bbb;
-}
-  
-li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-  
-/* Change the link color to #111 (black) on hover */
-li a:hover {
-    background-color: #111;
-}
-</style>
-<html>
-<head>
 
-  <meta charset="utf-8">
-  <title><%= title %></title>
-  <link rel="icon" href="/download.ico">
+<!doctype html>
 
-  <ul>
-    <li><a href="/calendar/Home">Home</a></li>
-    <li><a href="/calendar/pipeline">Pipeline</a></li>
-    <li><a href="/calendar/category">Export</a></li>
-    <li><a href="/calendar/complete">Completed</a></li>
-</ul>
+
+<header>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style/style.css">
+    <link rel="icon" href="download.ico">
+
+    <ul>
+        <li><a href="/calendar/Home">Home</a></li>
+        <li><a href="/calendar/pipeline">Pipeline</a></li>
+        <li><a href="/calendar/category">Export</a></li>
+        <li><a href="/calendar/complete">Completed</a></li>
+    </ul>
+</header>
+
 <script src="https://cdn.anychart.com/releases/8.6.0/js/anychart-core.min.js"> </script> 
 <script src ="https://cdn.anychart.com/releases/8.6.0/js/anychart-gantt.min.js"></script>
 </head>
@@ -56,18 +32,32 @@ li a:hover {
   
     // create a chart
     var chart = anychart.ganttProject();
-  
+    var timeline = chart.getTimeline();
+    timeline.rowEvenFill("gray 0.3");
+    timeline.rowOddFill("gray 0.1");
+    timeline.rowHoverFill("#ffd54f 0.3");
+    timeline.rowSelectedFill("#ffd54f 0.3");
+    timeline.columnStroke(null);
+    // configure tooltips of the timeline
+    chart.getTimeline().tooltip().useHtml(true);    
+    chart.getTimeline().tooltip().format(
+      "<span>" +
+      "{%actualStart}{dateTimeFormat:dd MMM} - " +
+      "{%actualEnd}{dateTimeFormat:dd MMM}</span><br>" +
+      "Description: {%Description}");
     // set the data
     chart.data(treeData);
     // configure the scale
     chart.getTimeline().scale().maximum(Date.now);
     // set the container id
     chart.container("container");
+
     // initiate drawing the chart
     chart.draw();
     // fit elements to the width of the timeline
     chart.fitAll();
-    console.log(anychart.data.Tree);
+    // configure the visual settings of the timeline
+
   });
 </script>
 </body>

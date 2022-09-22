@@ -166,7 +166,8 @@ BEGIN
     id,
     Title AS name, 
     DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS actualStart, 
-    DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS actualEnd
+    DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS actualEnd,
+    Description
 	FROM  `kalender`.`taskManager`;
 END
 ;;
@@ -230,7 +231,7 @@ BEGIN
 	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
     start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
     Description, id, EstimatedDuration, Title, Category 
-	FROM  `kalender`.`taskManager` WHERE  (Title = Serchterm OR Category = Serchterm OR Description = Serchterm);
+	FROM  `kalender`.`taskManager` WHERE  Title LIKE Serchterm OR Category LIKE Serchterm OR Description LIKE Serchterm;
 END
 ;;
 DELIMITER ;
@@ -249,10 +250,7 @@ BEGIN
 	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
     start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
     Description, id, EstimatedDuration, Title, Category 
-	FROM  `kalender`.`completed` WHERE  (Title = Serchterm OR Category = Serchterm OR Description = Serchterm);
+	FROM  `kalender`.`completed` WHERE  Title LIKE Serchterm OR Category LIKE Serchterm OR Description LIKE Serchterm;
 END
 ;;
 DELIMITER ;
-
-
-
