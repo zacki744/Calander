@@ -1,41 +1,7 @@
 <%- include("header", {title: title}); %>
 
 <h2><i></i>A summary of all of your aktivites<i></i></h2>
-
-<% for (const row of res) {%>
-    <div>
-        <table>
-            <tr>
-                <th> Title </th>
-                <th> Category </th>
-                <th> Description </th>
-                <th> Starting Time </th>
-                <th> Deadline </th>
-                <th> Estimated Duration </th>
-            </tr>
-            <tr class="colums">
-                <td><%= row.Title %></td>
-                <td><%= row.Category %></td>
-                <td><%= row.Description %></td>
-                <td><%= row.start %></td>
-                <td><%= row.end %></td>
-                <td><%= row.EstimatedDuration %></td>
-                <td>
-                    <a href="/calendar/update/<%= row.id %>" class="updateLink">Update</a>
-                </td>
-                <td>
-                    <div class="popup" onclick="myFunction('<%= row.id %>')" method="post">Delete
-                        <span class="popuptext" id="myPopup_<%= row.id %>"><a href="/calendar/delete/<%= row.id %>" method="post">Are you sertin?</a></span>
-                    </div>
-                </td>
-                <td>
-                    <a href="/calendar/complete/<%= row.id %>" class="updateLink" method="post">Complete</a>
-                </td>
-            </td> 
-            </tr>
-        </table>
-    </div>
-<% }; %>
+<br>
 <div>
     <form method="post" action="/calendar/Home" id="hiddenMenue">
         
@@ -64,8 +30,42 @@
 <br>
 <button class="circle" type="button" onclick="CreateColumn()"></button>
 <br>
+<div>
+    <table>
+        <tr>
+            <th> Title </th>
+            <th> Category </th>
+            <th> Description </th>
+            <th> Starting Time </th>
+            <th> Deadline </th>
+            <th> Estimated Duration </th>
+        </tr>
+<% for (const row of res) {%>
+            <tr class="colums">
+                <td><%= row.Title %></td>
+                <td><%= row.Category %></td>
+                <td><%= row.Description %></td>
+                <td><%= row.start %></td>
+                <td><%= row.end %></td>
+                <td><%= row.EstimatedDuration %></td>
+                <td class="bton">
+                    <a href="/calendar/update/<%= row.id %>" class="updateLink">Update</a>
+                </td>
+                <td class="bton">
+                    <div class="popup" onclick="myFunction('<%= row.id %>')" method="post">Delete
+                        <span class="popuptext" id="myPopup_<%= row.id %>"><a href="/calendar/delete/<%= row.id %>" method="post">Are you sertin?</a></span>
+                    </div>
+                </td>
+                <td class="bton">
+                    <a href="/calendar/complete/<%= row.id %>" class="updateLink" method="post">Complete</a>
+                </td>
+            </td> 
+            </tr>
 
-
+<% }; %>
+</table>
+</div>
+<br>
 <%- include("footer"); %>
 
 <script language="javascript">

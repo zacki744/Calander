@@ -22,27 +22,19 @@
 </header>
 
 <h2><i></i>A summery of all of your completed aktivites<i></i></h2>
-<style>
-    td {
-        background-color: green;
-        
-    }
-    tr:hover {
-        background-color: rgb(29, 29, 29);
-    }
-</style>
+<div>
+    <table>
+        <tr>
+            <th> Title </th>
+            <th> Category </th>
+            <th> Description </th>
+            <th> Starting Time </th>
+            <th> Deadline </th>
+            <th> Estimated Duration </th>
+            <th> ActualDuration </th>
+        </tr>
 <% for (const row of res) {%>
-    <div>
-        <table>
-            <tr>
-                <th> Title </th>
-                <th> Category </th>
-                <th> Description </th>
-                <th> Starting Time </th>
-                <th> Deadline </th>
-                <th> Estimated Duration </th>
-                <th> ActualDuration </th>
-            </tr>
+
             <tr class="colums">
                 <td><%= row.Title %></td>
                 <td><%= row.Category %></td>
@@ -51,15 +43,15 @@
                 <td><%= row.end %></td>
                 <td><%= row.EstimatedDuration %></td>
                 <td><%= row.ActualDuration %></td>
-                <td>
+                <td class="bton">
                     <div class="popup" onclick="myFunction('<%= row.id %>')" method="post">Delete
                         <span class="popuptext" id="myPopup_<%= row.id %>"><a href="/calendar/delete/<%= row.id %>" method="post">Are you sertin?</a></span>
                     </div>
                 </td>            
             </tr>
-        </table>
-    </div>
 <% }; %>
+</table>
+</div>
 <br>
 <%- include("footer"); %>
 
