@@ -52,7 +52,7 @@
         <input id="f_StartingTime" type="datetime-local" name="f_StartingTime" required><br>
 
         <label for="f_Deadline">Deadline</label><br>
-        <input id="f_Deadline" type="datetime-local" name="f_Deadline" required><br>
+        <input id="f_Deadline" type="datetime-local" name="f_Deadline" min="getElementById(f_StartingTime)" required><br>
 
         <label for="f_EstimatedDuration">Estimated Duration</label><br>
         <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" required><br> 
