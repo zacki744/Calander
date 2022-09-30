@@ -38,12 +38,13 @@ footer {
 }
 
 th {
+    border-right: 1px solid #bbb;
     color:whitesmoke;
     border-bottom: 10px black;
 }
 
 td {
-    color:black;
+    color:rgb(0, 0, 0);
     padding: 0.7em;
     border-style: groove;
 
@@ -57,7 +58,7 @@ td {
     background: rgb(206, 206, 206);
     
 }
-td:hover {
+.colums:hover {
     background-color: rgb(157, 197, 216);
 }
 p {
@@ -76,8 +77,10 @@ a {
 }
 
 table {
-    background-color: rgb(29, 29, 29);
+    background-color: rgba(37, 39, 51, 0.719);
     color:aliceblue;
+    padding: 0.5em;
+    padding-top: 0em;
 }
 
 label {
@@ -228,4 +231,10 @@ input[type=datetime-local] {
     input[type=text] {
       border: 1px solid #ccc;  
     }
+}
+
+.bton {
+    background-color: lightblue;
+    border-radius: 2em;
+    padding: 1em;
 }

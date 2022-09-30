@@ -169,10 +169,7 @@ async function serchQuery(param) {
 }
 
 function getDaysBetweenDates(d0, d1) {
-    console.log(d0);
-    console.log(d1);
     var msPerDay = 8.64e7;
-  
     // Copy dates so don't mess them up
     var x0 = new Date(d0);
     var x1 = new Date(d1);

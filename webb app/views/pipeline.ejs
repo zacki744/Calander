@@ -42,19 +42,23 @@
     timeline.rowHoverFill("#ffd54f 0.3");
     timeline.rowSelectedFill("#ffd54f 0.3");
     timeline.columnStroke(null);
-    // configure tooltips of the timeline
-    chart.getTimeline().tooltip().useHtml(true);    
-    chart.getTimeline().tooltip().format(
-      "<span>" +
-      "{%actualStart}{dateTimeFormat:dd MMM} - " +
-      "{%actualEnd}{dateTimeFormat:dd MMM}</span><br>" +
-      "Description: {%Description}");
     // set the data
     chart.data(treeData);
     // configure the scale
     chart.getTimeline().scale().maximum(Date.now);
     // set the container id
     chart.container("container");
+
+    // Set zoom levels.
+    var scale = chart.xScale();
+
+    scale.zoomLevels([
+        [
+            {unit: 'day', count: 3},
+            {unit: 'month', count: 1},
+            {unit: 'year', count: 1}
+        ]
+    ]);
 
     // initiate drawing the chart
     chart.draw();
