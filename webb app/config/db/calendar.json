@@ -1,6 +1,6 @@
 {
     "host":     "localhost",
-    "user":     "root",
+    "user":     "maria",
     "password": "123",
     "database": "Kalender",
     "multipleStatements": true

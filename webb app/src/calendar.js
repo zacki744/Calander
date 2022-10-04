@@ -18,7 +18,8 @@ module.exports = {
     serchQuery:             serchQuery,
     getDaysBetweenDates:    getDaysBetweenDates,
     SerchComplete:          SerchComplete,
-    SerchCompleteQuery:     SerchCompleteQuery
+    SerchCompleteQuery:     SerchCompleteQuery,
+    determin:               determin
 };
 
 const mysql  = require("promise-mysql");
@@ -60,19 +61,66 @@ async function findAllInTable() {
     return res[0];
 }
 
-async function insertItem(data) {
-    let sql = 'CALL `kalender`.`insertInto`(?, ?, ?, ?, ?, ?)';
-    let res = await db.query(
-        sql, [
-            data.f_Description,
-            data.f_Title,
-            data.f_Category,
-            data.f_StartingTime,
-            data.f_Deadline,
-            data.f_EstimatedDuration
-        ]);
+async function determin(data, all) {
+    let matching = [];
 
-    return res;
+    for (let i = 0; i < all.length; i++) {
+        var SD2 = new Date(all[i].WTstart);
+        var SD1 = new Date(data.f_StartingTime);
+        var ED1 = new Date(data.f_Deadline);
+        var ED2 = new Date(all[i].WTend);
+
+        if (ED1 <= ED2 || SD1 <= ED2) {
+            if (ED1 >= SD2 || SD1 >= SD2) {
+                matching.push(all[i].id); 
+            }
+        }
+
+    }
+
+    if (matching.length == 0) {
+        var ED = new Date(data.f_StartingTime);
+        data.f_WTstart = data.f_StartingTime;
+        data.f_WTend = new Date(ED.setDate(ED.getDate() + (data.f_EstimatedDuration / 8)))
+
+        return data.f_EstimatedDuration;
+    }
+
+    else {
+        var ED = new Date(data.f_StartingTime);
+        data.f_EstimatedDuration = data.f_EstimatedDuration * (1 + matching.length);
+        
+        if (data.f_EstimatedDuration >= (getDaysBetweenDates(data.f_Deadline, data.f_StartingTime) * 8)) {
+            return -1;
+        }
+
+        data.f_WTstart = data.f_StartingTime;
+        data.f_WTend = new Date(ED.setDate(ED.getDate() + (data.f_EstimatedDuration / 8)))
+        return data.f_EstimatedDuration;
+    }
+}
+
+async function insertItem(data) {
+    let sql = 'CALL `kalender`.`insertInto`(?, ?, ?, ?, ?, ?, ?, ?)';
+    let all = await findAllInTable();
+    let returnValue = await determin(data, all);
+    let res;
+    
+    if (returnValue > -1) {
+        res = await db.query(
+            sql, [
+                data.f_Description,
+                data.f_Title,
+                data.f_Category,
+                data.f_StartingTime,
+                data.f_Deadline,
+                data.f_EstimatedDuration,
+                data.f_WTstart,
+                data.f_WTend
+            ]);
+        return true;
+    }
+    return false;
 }
 
 async function getOne(id) {

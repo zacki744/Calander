@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS `kalender`.`taskManager` (
   `Description` VARCHAR(45) NULL,
   `StartingTime` DATETIME NULL,
   `Deadline` DATETIME NULL,
+  `WTstart` DATETIME NULL,
+  `WTend` DATETIME NULL,
   `EstimatedDuration` INT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
@@ -65,11 +67,13 @@ CREATE PROCEDURE `kalender`.`insertInto`
     `f_Category` VARCHAR(45),
     `f_StartingTime` DATETIME,
     `f_Deadline` DATETIME,
-    `f_EstimatedDuration` INT
+    `f_EstimatedDuration` INT,
+    `f_WTstart` DATETIME,
+    `f_WTend` DATETIME
 )
 BEGIN
-	INSERT INTO `kalender`.`taskManager` (`Description`, `StartingTime`, `Deadline`, `EstimatedDuration`, `Category`, `Title`)
-	values(`f_Description`, `f_StartingTime` ,`f_Deadline`, `f_EstimatedDuration`, `f_Category`, `f_Title`);
+	INSERT INTO `kalender`.`taskManager` (`Description`, `StartingTime`, `Deadline`, `EstimatedDuration`, `Category`, `Title`, `WTstart`, `WTend`)
+	values(`f_Description`, `f_StartingTime` ,`f_Deadline`, `f_EstimatedDuration`, `f_Category`, `f_Title`, `f_WTstart`, `f_WTend`);
         
 END
 ;;
@@ -102,8 +106,10 @@ DELIMITER ;;
 
 CREATE PROCEDURE SELECT_ALL()
 BEGIN
-	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
-    start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
+	SELECT id, DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS
+    start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end,
+	DATE_FORMAT(WTstart, '%Y-%m-%d %H:%i:%s') AS WTstart,
+    DATE_FORMAT(WTend, '%Y-%m-%d %H:%i:%s') AS WTend,
     Description, id, EstimatedDuration, Title, Category  
 	FROM  `kalender`.`taskManager`;
 END
@@ -165,8 +171,8 @@ BEGIN
 	SELECT 
     id,
     Title AS name, 
-    DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS actualStart, 
-    DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS actualEnd,
+    DATE_FORMAT(WTstart, '%Y-%m-%d %H:%i:%s') AS actualStart, 
+    DATE_FORMAT(WTend, '%Y-%m-%d %H:%i:%s') AS actualEnd,
     Description
 	FROM  `kalender`.`taskManager`;
 END

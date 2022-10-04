@@ -55,7 +55,8 @@ router.post("/Home", async (req, res) => {
         title: "Home"
     };
 
-    await calender.insertItem(req.body);
+    let status = await calender.insertItem(req.body);
+    console.log(status);
     data.res = await calender.showCategorys()
     res.render("home", data);
 });
