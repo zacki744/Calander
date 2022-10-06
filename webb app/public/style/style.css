@@ -238,3 +238,31 @@ input[type=datetime-local] {
     border-radius: 2em;
     padding: 1em;
 }
+
+.addForm {
+    text-align: center;
+    background-color: #666;
+    border-radius: 2em;
+    padding: 1em;
+}
+
+.formText {
+    color: white;
+    font-size: medium;
+}
+
+.Completebtn {
+    background-color: rgba(4, 7, 29, 0.719);
+    color:aliceblue;
+    padding: 0.5em;
+    padding-top: 0em;
+    border-style: none;
+}
+.hiddenMenue {
+    background-color: #111;
+    border-radius: 0.2em;
+    padding: 10px;
+    position: absolute;
+    display: none;
+
+}

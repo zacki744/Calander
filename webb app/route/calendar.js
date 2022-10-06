@@ -10,7 +10,16 @@ router.get("/Home", async (req, res) => {
         title: "Home"
     };
 
-    data.res = await calender.showCategorys()
+    data.result = "A summary of all of your aktivites";
+    data.time = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
+    data.res = await calender.findAllInTableHome();
+
+    for (let i = 0; i < data.res.length; i++) {
+        if((data.res[i].Description).length > 22) {
+            data.res[i].Description = data.res[i].Description.substring(0, 20) + "...";
+        }
+    }
+    
     res.render("home", data);
 });
 
@@ -19,7 +28,14 @@ router.get("/Home/serch", async (req, res) => {
         title: "Home"
     };
 
+    data.result = "A summary of all of your aktivites";
+    data.time = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
     data.res = await calender.Serch(req.url.split('=')[1])
+    for (let i = 0; i < data.res.length; i++) {
+        if((data.res[i].Description).length > 22) {
+            data.res[i].Description = data.res[i].Description.substring(0, 20) + "...";
+        }
+    }
     res.render("home", data);
 });
 
@@ -46,7 +62,15 @@ router.get("/", async (req, res) => {
         title: "Home"
     };
 
-    data.res = await calender.showCategorys()
+    data.result = "A summary of all of your aktivites";
+    data.time = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
+    data.res = await calender.findAllInTableHome()
+
+    for (let i = 0; i < data.res.length; i++) {
+        if((data.res[i].Description).length > 22) {
+            data.res[i].Description = data.res[i].Description.substring(0, 20) + "...";
+        }
+    }
     res.render("home", data);}
 );
 
@@ -54,11 +78,31 @@ router.post("/Home", async (req, res) => {
     let data= {
         title: "Home"
     };
+    
+    if ((typeof req.body.f_EstimatedDuration) == 'object') {
+        // move objekt to complete
+        await calender.Complete(req.body.f_EstimatedDuration);
+        // ridirect to completed
+        res.redirect("/calendar/complete")
+    }
+    else {
+        let result = await calender.insertItem(req.body);
+        data.result = "A summary of all of your aktivites";
 
-    let status = await calender.insertItem(req.body);
-    console.log(status);
-    data.res = await calender.showCategorys()
-    res.render("home", data);
+        if (result == false) {
+            data.result = "Culd not add a new task"
+        }
+        
+        data.res = await calender.findAllInTableHome();
+        data.time = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
+
+        for (let i = 0; i < data.res.length; i++) {
+            if((data.res[i].Description).length > 22) {
+                data.res[i].Description = data.res[i].Description.substring(0, 20) + "...";
+            }
+        }
+        res.render("home", data);
+    }
 });
 
 
@@ -92,13 +136,18 @@ router.get("/delete/:id", async (req, res) => {
     res.redirect("../Home");
 });
 
+router.get("/complete/delete/:id", async (req, res) => {
+    await calender.deleteItemComplete(req.params.id);
+    res.redirect("../../complete");
+});
+
+
 router.get("/pipeline", async (req, res) => {
     let data = {
         title: "pipeline"
     };
     
     data.obj = await calender.showCategorysGant();
-    console.log(data.obj)
     res.render("pipeline", data);
 });
 

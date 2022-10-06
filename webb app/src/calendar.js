@@ -19,7 +19,10 @@ module.exports = {
     getDaysBetweenDates:    getDaysBetweenDates,
     SerchComplete:          SerchComplete,
     SerchCompleteQuery:     SerchCompleteQuery,
-    determin:               determin
+    determin:               determin,
+    findAllInTableHome:     findAllInTableHome,
+    uppdate_WT:             uppdate_WT,
+    deleteItemComplete:     deleteItemComplete
 };
 
 const mysql  = require("promise-mysql");
@@ -45,6 +48,7 @@ let db;
 async function showCategorys() {
     return findAllInTable();
 }
+
 /**
 * Show all entries in the selected table.
 *
@@ -60,10 +64,94 @@ async function findAllInTable() {
     res = await db.query(sql);
     return res[0];
 }
+/**
+* Show all entries in the selected table.
+*
+* @async
+* @param {string} table A valid table name.
+*
+* @returns {RowDataPacket} Resultset from the query.
+*/
+async function findAllInTableHome() {
+    let sql = 'CALL `kalender`.SELECT_ALL_HOME();';
+    let res;
 
+    res = await db.query(sql);
+    return res[0];
+}
+
+/**
+* Uppdates the other tabels when you add a new task and there are paralel tables
+*
+* @async
+* @param {table}data the new task
+* @param {table}allA all task in databas.
+*
+* @returns {null} 
+*/
+async function uppdate_WT(table, all, newLen) {
+    let sql = `CALL Uppdate_WTwork(?, ?, ?)`;
+    console.table(table);
+    for (let i = 0; i < table.length; i++) {
+        for (let j = 0; j < all.length; j++) {
+            if (all[j].id == table[i]) {
+                let f_EstimatedDuration = all[j].EstimatedDuration + newLen;
+                let ed = new Date(all[j].end)
+                let newWTend = new Date(ed.setDate(ed.getDate() + (f_EstimatedDuration / 8)));
+        
+                await db.query(sql, [all[j].id, newWTend, f_EstimatedDuration]);
+            }
+        }
+    }
+}
+/**
+* Finds an opening in the skedual. if no avalible spots exist it extends the work period by how many tasks there are in paralel
+*
+* @async
+* @param {table}data the new task
+* @param {table}allA all task in databas.
+*
+* @returns {int} 1 for true, -1 for fals
+*/
 async function determin(data, all) {
     let matching = [];
+    var SD = new Date(data.f_StartingTime);
+    var ED = new Date(data.f_Deadline);
+    let WTstart = new Date(data.f_StartingTime);
+    let WTend = new Date(SD.setDate(SD.getDate() + (data.f_EstimatedDuration / 8)))
+    let con = true;
 
+    // find opening
+
+
+    while (WTend < ED && con) {
+        for (let i = 0; i < all.length; i++) {
+            var SD2 = new Date(all[i].WTstart);
+            var ED2 = new Date(all[i].WTend);
+    
+            if (WTend <= ED2 || WTstart <= ED2) {
+                if (WTend >= SD2 || WTstart >= SD2) {
+                    con = false;
+                }
+            }
+        }
+        if (con) {
+            data.f_WTend = WTend;
+            data.f_WTstart = WTstart;
+            con = false; 
+        }
+        else {
+            con = true;
+        }
+
+        WTstart = new Date(WTstart.setDate(WTstart.getDate() + 1))
+        WTend = new Date(WTend.setDate(WTend.getDate() + 1))
+    }
+    
+    if (!con) {
+        return 1
+    }
+    // if no opening, how many tasks are in paralel
     for (let i = 0; i < all.length; i++) {
         var SD2 = new Date(all[i].WTstart);
         var SD1 = new Date(data.f_StartingTime);
@@ -75,37 +163,30 @@ async function determin(data, all) {
                 matching.push(all[i].id); 
             }
         }
-
     }
 
-    if (matching.length == 0) {
-        var ED = new Date(data.f_StartingTime);
-        data.f_WTstart = data.f_StartingTime;
-        data.f_WTend = new Date(ED.setDate(ED.getDate() + (data.f_EstimatedDuration / 8)))
+    data.f_EstimatedDuration = data.f_EstimatedDuration * (1 + matching.length);
 
-        return data.f_EstimatedDuration;
+    if (data.f_EstimatedDuration >= (getDaysBetweenDates(data.f_Deadline, data.f_StartingTime) * 8)) {
+        return -1;
     }
 
-    else {
-        var ED = new Date(data.f_StartingTime);
-        data.f_EstimatedDuration = data.f_EstimatedDuration * (1 + matching.length);
-        
-        if (data.f_EstimatedDuration >= (getDaysBetweenDates(data.f_Deadline, data.f_StartingTime) * 8)) {
-            return -1;
-        }
-
-        data.f_WTstart = data.f_StartingTime;
-        data.f_WTend = new Date(ED.setDate(ED.getDate() + (data.f_EstimatedDuration / 8)))
-        return data.f_EstimatedDuration;
+    //uppdate the paralel tasks
+    if (matching.length > 0) {
+        await uppdate_WT(matching, all, data.f_EstimatedDuration);
     }
+    data.f_WTstart = data.f_StartingTime;
+    data.f_WTend = new Date(ED.setDate(ED.getDate() + (data.f_EstimatedDuration / 8)))
+    return 1;
 }
+
 
 async function insertItem(data) {
     let sql = 'CALL `kalender`.`insertInto`(?, ?, ?, ?, ?, ?, ?, ?)';
     let all = await findAllInTable();
     let returnValue = await determin(data, all);
     let res;
-    
+
     if (returnValue > -1) {
         res = await db.query(
             sql, [
@@ -131,7 +212,9 @@ async function getOne(id) {
 }
 
 async function UpdateItem(data) {
-    let sql = "CALL `kalender`.`uppdate_objekt`(?, ?, ?, ?, ?, ?, ?);";
+    await deleteItem(data.f_id);
+    await insertItem(data);
+   /* let sql = "CALL `kalender`.`uppdate_objekt`(?, ?, ?, ?, ?, ?, ?);";
     let res = await db.query(
         sql, [
             data.f_id,
@@ -143,7 +226,7 @@ async function UpdateItem(data) {
             data.f_EstimatedDuration
         ]);
 
-    return res;
+    return res;*/
 }
 
 async function deleteItem(id) {
@@ -167,8 +250,28 @@ async function showCategorysGant() {
 async function findAllInTableGant() {
     let sql = 'CALL `kalender`.SELECT_ALL_for_gant();';
     let res;
-
+    let now = new Date();
     res = await db.query(sql);
+
+    for (let row of res[0]) {
+        let SD = new Date(row.actualStart);
+        let ED = new Date(row.actualEnd);
+        let diff = getDaysBetweenDates(ED, SD);
+        if (SD <= now) {
+            if (ED <= now) {
+                row.progressValue = "100%";
+            }
+            else {
+                console.log(diff)
+                console.log(getDaysBetweenDates(now, SD))
+                let temp = Math.round((diff  - getDaysBetweenDates(now, SD)) / (((diff  + getDaysBetweenDates(now, SD))/ 2)) * 100);
+                row.progressValue = (100 - temp) + '%';
+            }
+        }
+        else {
+            row.progressValue = "0%";
+        }
+    }
     return res[0];
 }
 
@@ -192,14 +295,8 @@ async function findAllInTableComplete() {
 }
 
 async function Complete(_id) {
-    let sql = "CALL `kalender`.COMPLETE_OBJ('?', ?);";
-    let sql2 = `SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS start FROM  kalender.taskManager WHERE id = ?`;
-    let res;
-    var diff;
-
-    let start = await db.query(sql2, [_id])
-    diff = getDaysBetweenDates(Date.now(), start[0].start);
-    res = await db.query(sql, [parseInt(_id), (diff * 5)]);
+    let sql = "CALL `kalender`.COMPLETE_OBJ(?, ?);";
+    await db.query(sql, [parseInt(_id[1]), parseInt(_id[0])]);
 }
 
 async function Serch(param) {
@@ -239,7 +336,11 @@ async function SerchCompleteQuery(param) {
     let sql = "CALL `kalender`.serch_completed(?);";
     let res;
 
-    console.log(param)
     res = await db.query(sql, [serchterm]);
     return res[0];
+}
+
+async function deleteItemComplete(_ID) {
+    let sql = "CALL `kalender`.COMPLETE_DELETE( ?);";
+    await db.query(sql, [_ID]);
 }

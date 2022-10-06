@@ -24,13 +24,17 @@ USE `kalender` ;
 -- -----------------------------------------------------
 -- Table `kalender`.`taskManager`
 -- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Table `kalender`.`taskManager`
+-- -----------------------------------------------------
 DROP TABLE IF EXISTS `kalender`.`taskManager` ;
 
 CREATE TABLE IF NOT EXISTS `kalender`.`taskManager` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `Title` VARCHAR(45) NULL,
   `Category` VARCHAR(45) NULL,
-  `Description` VARCHAR(45) NULL,
+  `Description` VARCHAR(500) NULL,
   `StartingTime` DATETIME NULL,
   `Deadline` DATETIME NULL,
   `WTstart` DATETIME NULL,
@@ -43,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `kalender`.`completed` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `Title` VARCHAR(45) NULL,
   `Category` VARCHAR(45) NULL,
-  `Description` VARCHAR(45) NULL,
+  `Description` VARCHAR(500) NULL,
   `StartingTime` DATETIME NULL,
   `Deadline` DATETIME NULL,
   `EstimatedDuration` INT NULL,
@@ -62,7 +66,7 @@ DROP PROCEDURE IF EXISTS `kalender`.`insertInto`;
 DELIMITER ;;
 CREATE PROCEDURE `kalender`.`insertInto`
 (
-	`f_Description`  VARCHAR(45),
+	`f_Description`  VARCHAR(500),
     `f_Title` VARCHAR(45),
     `f_Category` VARCHAR(45),
     `f_StartingTime` DATETIME,
@@ -117,6 +121,28 @@ END
 DELIMITER ;
 
 --
+-- returns all where 
+--
+DROP PROCEDURE IF EXISTS SELECT_ALL_HOME;
+DELIMITER ;;
+
+CREATE PROCEDURE SELECT_ALL_HOME()
+BEGIN
+	SELECT 
+    id,
+	DATE_FORMAT(Deadline, '%M-%d') AS end,
+	DATE_FORMAT(WTstart, '%m-%d') AS WTstart,
+    DATE_FORMAT(WTend, '%m-%d') AS WTend,
+    Description,
+    EstimatedDuration,
+    Title,
+    Category  
+	FROM  `kalender`.`taskManager`;
+END
+;;
+DELIMITER ;
+
+--
 -- updates a objekt
 --
 DROP PROCEDURE IF EXISTS `kalender`.`uppdate_objekt`;
@@ -124,7 +150,7 @@ DELIMITER ;;
 CREATE PROCEDURE `kalender`.`uppdate_objekt`
 (
 	`f_id` INT,
-	`f_Description`  VARCHAR(45),
+	`f_Description`  VARCHAR(500),
     `f_Title` VARCHAR(45),
     `f_Category` VARCHAR(45),
     `f_StartingTime` DATETIME,
@@ -216,7 +242,15 @@ BEGIN
 		`Deadline`,
 		`EstimatedDuration`
 	) 
-	SELECT * FROM `kalender`.`taskManager` WHERE _ID = `id`;
+	SELECT 
+		`id`, 
+		`Title`, 
+		`Category`,
+		`Description`,
+		`StartingTime`,
+		`Deadline`,
+		`EstimatedDuration`
+	FROM `kalender`.`taskManager` WHERE _ID = `id`;
 	UPDATE `kalender`.`completed` SET `ActualDuration` = f_actualduration WHERE _ID = `id`;
     DELETE FROM `kalender`.`taskManager` WHERE _ID = `id`;
 END
@@ -257,6 +291,47 @@ BEGIN
     start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
     Description, id, EstimatedDuration, Title, Category 
 	FROM  `kalender`.`completed` WHERE  Title LIKE Serchterm OR Category LIKE Serchterm OR Description LIKE Serchterm;
+END
+;;
+DELIMITER ;
+
+--
+-- updates time for objekt by id
+--
+DROP PROCEDURE IF EXISTS Uppdate_WTwork;
+DELIMITER ;;
+CREATE PROCEDURE Uppdate_WTwork
+(
+	`f_id` INT,
+    `f_Deadline` DATETIME,
+    `f_EstimatedDuration` INT
+)
+BEGIN
+	UPDATE `kalender`.`taskManager` SET
+    `WTend` = `f_Deadline`,
+    `EstimatedDuration` = `f_EstimatedDuration`
+    WHERE
+		`id` = `f_id`;
+        
+END
+;;
+DELIMITER ;
+
+
+
+--
+-- delete from complete
+--
+DROP PROCEDURE IF EXISTS COMPLETE_DELETE;
+DELIMITER ;;
+CREATE PROCEDURE COMPLETE_DELETE
+(
+	_ID INT
+
+)
+BEGIN
+	DELETE FROM `kalender`.`completed` WHERE _ID = `id`;
+        
 END
 ;;
 DELIMITER ;

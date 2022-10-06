@@ -18,8 +18,15 @@
         <label for="f_Title"> Title</label><br>
         <input id="f_Title" type="text" name="f_Title" value="<%= obj[0].Title %>" required><br>
 
-        <label for="f_Category">Actual Duration</label><br>
-        <input id="f_Category" type="text" name="f_Category" value="<%= obj[0].Category %>" required><br>
+        <label for="f_Category" class="formText"> Category</label><br>
+        <select id="f_Category" type="text" name="f_Category" required>
+            <option value="">None</option>
+            <option value="Skool">Skool</option>
+            <option value="Work">Work</option>
+            <option value="Home">Home</option>
+            <option value="Food">Food</option>
+            <option value="Other">Other</option>
+        </select><br>
 
         <label for="f_Description"> Description</label><br>
         <input id="f_Description" type="text" name="f_Description" value="<%= obj[0].Description %>" required><br>

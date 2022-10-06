@@ -1,26 +1,36 @@
 <%- include("header", {title: title}); %>
 
-<h2><i></i>A summary of all of your aktivites<i></i></h2>
+<h2 id="title"><i></i><%- result; %><i></i></h2>
+<br onload="getResultes(result)">
+<br>
+<button class="circle" type="button" onclick="CreateColumn()"></button>
 <br>
 <div>
-    <form method="post" action="/calendar/Home" id="hiddenMenue">
+    <form method="post" action="/calendar/Home" id="hiddenMenue" class="addForm">
         
-        <label for="f_Title"> Title</label><br>
+        <label for="f_Title"class="formText"> Title</label><br>
         <input id="f_Title" type="text" name="f_Title" required><br>
 
-        <label for="f_Category"> Category</label><br>
-        <input id="f_Category" type="text" name="f_Category" required><br>
+        <label for="f_Category" class="formText"> Category</label><br>
+        <select id="f_Category" type="text" name="f_Category" required>
+            <option value="">None</option>
+            <option value="Skool">Skool</option>
+            <option value="Work">Work</option>
+            <option value="Home">Home</option>
+            <option value="Food">Food</option>
+            <option value="Other">Other</option>
+        </select><br>
 
-        <label for="f_Description"> Description</label><br>
-        <input id="f_Description" type="text" name="f_Description" required><br>
+        <label for="f_Description" class="formText" > Description</label><br>
+        <textarea  id="f_Description" type="text" cols="40" rows="5" name="f_Description" required ></textarea><br>
 
-        <label for="f_StartingTime">Starting Time</label><br>
-        <input id="f_StartingTime" type="datetime-local" name="f_StartingTime" required><br>
+        <label for="f_StartingTime" class="formText">Starting Time </label><br>
+        <input id="f_StartingTime" type="datetime-local" name="f_StartingTime" min="<%= time %>" oninput="getMinDeadline(f_StartingTime)" required><br>
 
-        <label for="f_Deadline">Deadline</label><br>
-        <input id="f_Deadline" type="datetime-local" name="f_Deadline" min="getElementById(f_StartingTime)" required><br>
+        <label for="f_Deadline" class="formText">Deadline</label><br>
+        <input id="f_Deadline" type="datetime-local" name="f_Deadline" required min=""><br>
 
-        <label for="f_EstimatedDuration">Estimated Duration</label><br>
+        <label for="f_EstimatedDuration" class="formText">Estimated Duration</label><br>
         <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" required><br> 
         <br>
         <input type="submit" value="Add">
@@ -28,16 +38,14 @@
     </form>
 </div>
 <br>
-<button class="circle" type="button" onclick="CreateColumn()"></button>
-<br>
 <div>
     <table>
         <tr>
             <th> Title </th>
             <th> Category </th>
             <th> Description </th>
-            <th> Starting Time </th>
             <th> Deadline </th>
+            <th> Work period </th>
             <th> Estimated Duration </th>
         </tr>
 <% for (const row of res) {%>
@@ -45,8 +53,8 @@
                 <td><%= row.Title %></td>
                 <td><%= row.Category %></td>
                 <td><%= row.Description %></td>
-                <td><%= row.start %></td>
                 <td><%= row.end %></td>
+                <td><%= row.WTstart + " " + row.WTend %></td>
                 <td><%= row.EstimatedDuration %></td>
                 <td class="bton">
                     <a href="/calendar/update/<%= row.id %>" class="updateLink">Update</a>
@@ -56,8 +64,19 @@
                         <span class="popuptext" id="myPopup_<%= row.id %>"><a href="/calendar/delete/<%= row.id %>" method="post">Are you sertin?</a></span>
                     </div>
                 </td>
-                <td class="bton">
-                    <a href="/calendar/complete/<%= row.id %>" class="updateLink" method="post">Complete</a>
+                <td class="Completebtn">
+                    <button><a onclick="Complete('CompleteInput_<%= row.id %>')"  class="updateLink" >Complete</a></button>
+                    <div class="hiddenMenue" id="CompleteInput_<%= row.id %>">
+                        <form method="post">
+                            <label for="f_EstimatedDuration" class="formText">Estimated Duration</label>
+                            <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" required>
+
+                            <label for="f_id" class="formText" style="display:none">Estimated Duration</label>
+                            <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" value="<%= row.id %>" style="display:none">
+                            <input type="submit" value="Add">
+                        </form>
+                    </div>
+                    
                 </td>
             </td> 
             </tr>
@@ -71,11 +90,37 @@
 <script language="javascript">
     function CreateColumn()
     {
-        document.getElementById("hiddenMenue").style.display="block";
+        let forum = document.getElementById("hiddenMenue")
+        if (forum.style.display == "block"){
+            forum.style.display="none";
+        }
+        else {
+            forum.style.display="block";
+        }
     }
     function myFunction(id) {
         let theId = "myPopup_" + id;
         var popup = document.getElementById(theId);
         popup.classList.toggle("show");
+    }
+    function getMinDeadline() {
+        let ST = document.getElementById('f_StartingTime');
+        let ET = document.getElementById('f_Deadline');
+        ET.min = new Date(ST.value).toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
+        console.log(ST.min);
+    }
+    function getResultes(title) {
+        let ET = document.getElementById('title');
+        if (ET.value == "Culd not add a new task") {
+            document.getElementById("title").value.style.color = "#ff0000";
+        }
+    }
+    function Complete(id) {
+        if (document.getElementById(id).style.display=="block") {
+            document.getElementById(id).style.display="none";
+        }
+        else {
+            document.getElementById(id).style.display="block";
+        }
     }
 </script>
