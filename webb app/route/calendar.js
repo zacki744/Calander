@@ -1,15 +1,14 @@
 "use strict"
 
-const express = require("express");
-const calender    = require("../src/calendar.js")
-const router  = express.Router();
+const express       = require("express");
+const calender      = require("../src/calendar.js")
+const router        = express.Router();
 
 // Add a route for the path /home
 router.get("/Home", async (req, res) => {
     let data= {
         title: "Home"
     };
-
     data.result = "A summary of all of your aktivites";
     data.time = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
     data.res = await calender.findAllInTableHome();
@@ -27,15 +26,16 @@ router.get("/Home/serch", async (req, res) => {
     let data= {
         title: "Home"
     };
-
     data.result = "A summary of all of your aktivites";
     data.time = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
-    data.res = await calender.Serch(req.url.split('=')[1])
+    data.res = await calender.Serch(req.url.split('=')[1]);
+
     for (let i = 0; i < data.res.length; i++) {
         if((data.res[i].Description).length > 22) {
             data.res[i].Description = data.res[i].Description.substring(0, 20) + "...";
         }
     }
+
     res.render("home", data);
 });
 
@@ -61,7 +61,6 @@ router.get("/", async (req, res) => {
     let data= {
         title: "Home"
     };
-
     data.result = "A summary of all of your aktivites";
     data.time = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
     data.res = await calender.findAllInTableHome()
@@ -78,7 +77,7 @@ router.post("/Home", async (req, res) => {
     let data= {
         title: "Home"
     };
-    
+
     if ((typeof req.body.f_EstimatedDuration) == 'object') {
         // move objekt to complete
         await calender.Complete(req.body.f_EstimatedDuration);
@@ -88,7 +87,6 @@ router.post("/Home", async (req, res) => {
     else {
         let result = await calender.insertItem(req.body);
         data.result = "A summary of all of your aktivites";
-
         if (result == false) {
             data.result = "Culd not add a new task"
         }
@@ -148,6 +146,7 @@ router.get("/pipeline", async (req, res) => {
     };
     
     data.obj = await calender.showCategorysGant();
+    data.res = await calender.findAllInTableHome();
     res.render("pipeline", data);
 });
 

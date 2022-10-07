@@ -24,10 +24,22 @@
 <script src ="https://cdn.anychart.com/releases/8.6.0/js/anychart-gantt.min.js"></script>
 </head>
 <p id="the_data" hidden><%= JSON.stringify(obj) %></p>
+<br>
+<button id="fitAll" onclick="fitAll()">Fit All</button>
+<button id="fitTask" onclick="fitTask()">Fit Task</button>
+<label for="idSelect">id: </label>
+<select id="idSelect" onchange="updateNameLabel()">
+  <% for (const row of res) {%>
+    <option value="<%= row.id %>"><%= row.id %></option>  
+    <% }; %>
+
+</select>
+
 <body><br><br>
 <div id = "container" ></div><br>
 <br>
 <script>
+  var chart;
   anychart.onDocumentReady(function () {
     const elem = document.getElementById('the_data').innerHTML;
     data1 = JSON.parse(elem);
@@ -35,13 +47,16 @@
     var treeData = anychart.data.tree(data1, "as-tree");
   
     // create a chart
-    var chart = anychart.ganttProject();
+
+    chart = anychart.ganttProject();
     var timeline = chart.getTimeline();
     timeline.rowEvenFill("gray 0.3");
     timeline.rowOddFill("gray 0.1");
     timeline.rowHoverFill("#ffd54f 0.3");
     timeline.rowSelectedFill("#ffd54f 0.3");
     timeline.columnStroke(null);
+    chart.defaultRowHeight(35);
+
     // set the data
     chart.data(treeData);
     // configure the scale
@@ -67,6 +82,19 @@
     // configure the visual settings of the timeline
 
   });
+
+  
+// fit all elements to the width of the timeline
+function fitAll() {
+  chart.fitAll();
+}
+
+// fit the given element to the width of the timeline
+function fitTask() {
+  var id = document.getElementById("idSelect").value;
+  chart.fitToTask(id);
+}
+
 </script>
 </body>
 </html>
