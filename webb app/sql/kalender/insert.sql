@@ -10,7 +10,7 @@ VALUES ("second", "work", "ksudkfgb", (now() + INTERVAL 5 DAY), (now() + INTERVA
 INSERT INTO `kalender`.`taskManager` (Title, Category, Description, StartingTime, Deadline, EstimatedDuration, WTstart, WTend)
 VALUES ("therd", "skool", "ksudkfgb", (now() + INTERVAL 12 DAY), (now() + INTERVAL 20 DAY), 80,  (now() + INTERVAL 12 DAY), (now() + INTERVAL 20 DAY));
 
+INSERT INTO capacity(cap) VALUES (8);
 
 
-
-
+CALL GET_CAPACITY();

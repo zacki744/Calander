@@ -3,6 +3,16 @@
     <h2 id="title"><i></i><%- result; %><i></i></h2>
     <br>
     <br>
+    <button><a onclick="Complete('Capacity_Input')" style="color: black">Set Capacity</a></button>
+    <div class="hiddenMenue" id="Capacity_Input">
+        <form method="post">
+            <label for="f_capacity" class="formText">Set Capacity</label>
+            <input id="f_capacity" type="number" name="f_capacity" required>
+
+            <input type="submit" value="Add">
+        </form>
+    </div>
+    <br>
     <button class="circle" type="button" onclick="CreateColumn()"></button>
     <br>
     <div>

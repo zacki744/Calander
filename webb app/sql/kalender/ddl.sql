@@ -22,8 +22,15 @@ CREATE SCHEMA IF NOT EXISTS `kalender` DEFAULT CHARACTER SET utf8mb4 ;
 USE `kalender` ;
 
 -- -----------------------------------------------------
--- Table `kalender`.`taskManager`
+-- Variable capacity
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS capacity;
+
+CREATE TABLE IF NOT EXISTS capacity (
+	ID INT AUTO_INCREMENT,
+	cap INT,
+	PRIMARY KEY (ID))
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `kalender`.`taskManager`
@@ -332,6 +339,38 @@ CREATE PROCEDURE COMPLETE_DELETE
 BEGIN
 	DELETE FROM `kalender`.`completed` WHERE _ID = `id`;
         
+END
+;;
+DELIMITER ;
+
+
+--
+-- Update capacity
+--
+
+DROP PROCEDURE IF EXISTS UPDATE_CAPACITY;
+DELIMITER ;;
+CREATE PROCEDURE UPDATE_CAPACITY
+(
+	f_capacity INT
+)
+BEGIN
+	UPDATE Capacity SET cap = f_capacity WHERE ID = 1;
+END
+;;
+DELIMITER ;
+
+--
+-- GET capacity
+--
+
+DROP PROCEDURE IF EXISTS GET_CAPACITY;
+DELIMITER ;;
+CREATE PROCEDURE GET_CAPACITY
+(
+)
+BEGIN
+	SELECT * FROM Capacity;
 END
 ;;
 DELIMITER ;

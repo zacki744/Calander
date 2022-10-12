@@ -22,7 +22,9 @@ module.exports = {
     determin:               determin,
     findAllInTableHome:     findAllInTableHome,
     uppdate_WT:             uppdate_WT,
-    deleteItemComplete:     deleteItemComplete
+    deleteItemComplete:     deleteItemComplete,
+    UpdateCapacity:         UpdateCapacity,
+    GetCapacity:            GetCapacity
 };
 
 const mysql  = require("promise-mysql");
@@ -343,4 +345,14 @@ async function SerchCompleteQuery(param) {
 async function deleteItemComplete(_ID) {
     let sql = "CALL `kalender`.COMPLETE_DELETE( ?);";
     await db.query(sql, [_ID]);
+}
+
+async function UpdateCapacity(capacity) {
+    let sql = "CALL UPDATE_CAPACITY(?);";
+    console.log(capacity);
+    await db.query(sql, [capacity]);
+}
+
+async function GetCapacity() {
+    
 }

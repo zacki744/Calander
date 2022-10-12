@@ -77,12 +77,18 @@ router.post("/Home", async (req, res) => {
     let data= {
         title: "Home"
     };
-
+    console.table(typeof req.body.f_capacity)
     if ((typeof req.body.f_EstimatedDuration) == 'object') {
         // move objekt to complete
         await calender.Complete(req.body.f_EstimatedDuration);
         // ridirect to completed
         res.redirect("/calendar/complete")
+    }
+    if ((typeof req.body.f_capacity) == 'string') {
+        // update capacity
+        await calender.UpdateCapacity(req.body.f_capacity);
+        // ridirect to home
+        res.redirect("/calendar/Home")
     }
     else {
         let result = await calender.insertItem(req.body);
