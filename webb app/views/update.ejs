@@ -19,8 +19,8 @@
         <input id="f_Title" type="text" name="f_Title" value="<%= obj[0].Title %>" required><br>
 
         <label for="f_Category" class="formText"> Category</label><br>
-        <select id="f_Category" type="text" name="f_Category" required>
-            <option value="">None</option>
+        <select id="f_Category" type="text" name="f_Category" value="<%= obj[0].Category %>" required>
+            <option value="<%= obj[0].Category %>"><%= obj[0].Category %></option>
             <option value="Skool">Skool</option>
             <option value="Work">Work</option>
             <option value="Home">Home</option>

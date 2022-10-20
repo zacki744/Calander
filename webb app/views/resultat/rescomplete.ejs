@@ -1,0 +1,50 @@
+<style>
+    .zui-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+    }
+    .zui-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: black;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .zui-table tbody td {
+        border: solid 1px #DDEEEE;
+        color: black;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    tr:nth-child(even) {
+        background-color: #9fb0fa;
+    }
+</style>
+<div>
+    <table class="zui-table">
+
+        <tr>
+            <th> Title </th>
+            <th> Category </th>
+            <th> Description </th>
+            <th> Starting Time </th>
+            <th> Deadline </th>
+            <th> Estimated Duration </th>
+            <th> ActualDuration </th>
+        </tr>
+<% for (const row of res) {%>
+        <tr class="colums">
+            <td><%= row.Title %></td>
+            <td><%= row.Category %></td>
+            <td><%= row.Description %></td>
+            <td><%= row.start %></td>
+            <td><%= row.end %></td>
+            <td><%= row.EstimatedDuration %></td>
+            <td><%= row.ActualDuration %></td>           
+        </tr>
+<% }; %>
+</table>
+</div>

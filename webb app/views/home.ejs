@@ -1,13 +1,48 @@
 <%- include("header", {title: title}); %>
-<body onload="getResultes('<%- result; %>')">
-    <h2 id="title"><i></i><%- result; %><i></i></h2>
+<body >
+    <p id="result_from_adding" style="display:none">'<%= JSON.stringify(result); %>'</p>
+    <p id="Table_content" style="display:none">'<%= JSON.stringify(res); %>'</p>
+    <p id="confirm" style="display:none">'<%= JSON.stringify(confirm); %>'</p>
+    <h2 id="title"><i></i>A summary of all of your aktivites<i></i></h2>
+
+    <div id="Error_message" class="addForm"  style="display:none" >
+        <h2 style="color:rgba(223, 112, 78, 0.918)">The task culd not be adde. this is becaus there were no openings in your scedual around the given time and you had to many</h2>
+        <h2 style="color:rgba(223, 107, 78, 0.904)">task durring this period as well so the task cant be added.</h2>
+    </div>
+
+    <div id="pop_up_confirmation" style="display:none">
+        <form method="post" action="/calendar/Home" class="addForm">
+            <h2 id="respons_to_problem"></h2>
+            
+            <label for="c_Title" class="formText"> Title</label><br>
+            <input id="c_Title" type="text" name="c_title" value="sedgsegsgsgsges" required><br>
+
+            <label for="c_Category" class="formText"> Category</label><br>
+            <input id="c_Category" type="text" name="c_Category" required><br>
+
+            <label for="c_Description" class="formText" > Description</label><br>
+            <textarea  id="c_Description" type="text" cols="40" rows="5" name="c_Description" required ></textarea><br>
+
+            <label for="c_StartingTime" class="formText">Starting Time </label><br>
+            <input id="c_StartingTime" type="datetime-local" name="c_StartingTime" required><br>
+
+            <label id="labed_c_Deadline" for="c_Deadline" class="formText" >Deadline</label><br>
+            <input id="c_Deadline" type="datetime-local" name="c_Deadline" required><br>
+
+            <label id="labed_c_EstimatedDuration" for="c_EstimatedDuration" class="formText">Estimated Duration</label><br>
+            <input id="c_EstimatedDuration" type="number" name="c_EstimatedDuration" required><br> 
+            <br>
+            <P>(Or you culd manuly change the time and name of any column no question asked)</P>
+            <input type="submit" value="Accept">  <button type="button" onclick="closeUppdateForm()">Deny</button>
+
+        </form>
+    </div>
     <br>
-    <br>
-    <button><a onclick="Complete('Capacity_Input')" style="color: black">Set Capacity</a></button>
+    <button><a onclick="capOpen('Capacity_Input')" style="color: black; display: 'none'">Set Capacity</a></button>
     <div class="hiddenMenue" id="Capacity_Input">
         <form method="post">
             <label for="f_capacity" class="formText">Set Capacity</label>
-            <input id="f_capacity" type="number" name="f_capacity" required>
+            <input id="f_capacity" type="number" name="f_capacity" value="<%= cap[0].cap; %>" min="1" max="24" required>
 
             <input type="submit" value="Add">
         </form>
@@ -41,7 +76,7 @@
             <input id="f_Deadline" type="datetime-local" name="f_Deadline" required min=""><br>
 
             <label for="f_EstimatedDuration" class="formText">Estimated Duration</label><br>
-            <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" required><br> 
+            <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" min="1" max="999" required><br> 
             <br>
             <input type="submit" value="Add">
 
@@ -58,48 +93,107 @@
                 <th> Work period </th>
                 <th> Estimated Duration </th>
             </tr>
-    <% for (const row of res) {%>
+            <% for (const row of res) {%>
                 <tr class="colums">
                     <td><%= row.Title %></td>
                     <td><%= row.Category %></td>
                     <td><%= row.Description %></td>
                     <td><%= row.end %></td>
-                    <td><%= row.WTstart + " " + row.WTend %></td>
+                    <td><%= row.WTstart + " to " + row.WTend %></td>
                     <td><%= row.EstimatedDuration %></td>
-                    <td class="bton">
-                        <a href="/calendar/update/<%= row.id %>" class="updateLink">Update</a>
+                    <td class="material-symbols-outlined">
+                        <a href="/calendar/update/<%= row.id %>" class="updateLink">&#xe22b</a>
                     </td>
-                    <td class="bton">
+                    <td class="material-symbols-outlined">
                         <div class="popup" onclick="myFunction('<%= row.id %>')" method="post">Delete
                             <span class="popuptext" id="myPopup_<%= row.id %>"><a href="/calendar/delete/<%= row.id %>" method="post">Are you sertin?</a></span>
                         </div>
                     </td>
-                    <td class="Completebtn">
-                        <button><a onclick="Complete('CompleteInput_<%= row.id %>')"  class="updateLink" >Complete</a></button>
-                        <div class="hiddenMenue" id="CompleteInput_<%= row.id %>">
-                            <form method="post">
-                                <label for="f_EstimatedDuration" class="formText">Estimated Duration</label>
-                                <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" required>
+                    <td>
+                        <span type="button" onclick="Complete('CompleteInput_<%= row.id %>')" class="material-symbols-outlined" >Done</span>
+                            <div class="hiddenMenue" style="display:none;" id="CompleteInput_<%= row.id %>" >
+                                <form method="post">
+                                    <label for="comp_EstimatedDuration" class="formText">Estimated Duration</label>
+                                    <input id="comp_EstimatedDuration_<%= row.id %>" type="number" name="comp_EstimatedDuration"  required>
 
-                                <label for="f_id" class="formText" style="display:none">Estimated Duration</label>
-                                <input id="f_EstimatedDuration" type="number" name="f_EstimatedDuration" value="<%= row.id %>" style="display:none">
-                                <input type="submit" value="Add">
-                            </form>
-                        </div>
-                        
-                    </td>
-                </td> 
+                                    <label for="comp_id" class="formText" style="display:none"></label>
+                                    <input id="comp_id" type="number" name="comp_id" value="<%= row.id %>" style="display:none;">
+                                    <input type="submit" value="Add">
+                                    <button type="button" onclick="CompleteDismis('CompleteInput_<%= row.id %>')">Dismis</button>
+                                </form>
+                            </div> 
+                        </td>
+                    </td> 
                 </tr>
-
-    <% }; %>
-    </table>
+            <% }; %>
+        </table>
     </div>
-    <br>
+<br>
 </body >
 
 <%- include("footer"); %>
 
 <script language="javascript">
+    let toopen = 1;
+    document.addEventListener('DOMContentLoaded', function() {
+        const elem = document.getElementById("result_from_adding").innerHTML;
+        const C = document.getElementById("confirm").innerHTML;
+        console.log(C.substring(1, 3) )
+        if (C.substring(1, 3) == '-1') {
+            document.getElementById("respons_to_problem").innerHTML = 'Becaus of the fakt that the capacity dose not give you enough time to complete the task in the given time. I recomend that you extend your deadline';
+            let label = document.getElementById("labed_c_Deadline").innerHTML = 'New Deadline';
+            label.innerHTML = 'New Deadline';
+            document.getElementById("labed_c_Deadline").style="color:rgb(253, 180, 194); font-size: 20px"
+
+            let data1 = JSON.parse(elem.substring(1, elem.length - 1));
+
+            document.getElementById('pop_up_confirmation').style.display="block";
+            document.getElementById('c_Title').value = data1.f_Title;
+            document.getElementById('c_Category').value = data1.f_Category;
+            document.getElementById('c_Description').value = data1.f_Description;
+            document.getElementById('c_StartingTime').value = data1.f_StartingTime;
+            document.getElementById('c_Deadline').value = (data1.f_WTend).substring(0, 16); 
+            document.getElementById('c_EstimatedDuration').value = data1.f_EstimatedDuration;
+
+        } else if (C.substring(1, 3)  == '-2') {
+            let capLabel = document.getElementById("labed_c_EstimatedDuration");
+            capLabel.innerHTML = 'New Capacity';
+            document.getElementById("labed_c_EstimatedDuration").style="color:rgb(253, 180, 194); font-size: 20px";
+
+            document.getElementById("respons_to_problem").innerHTML = 'Because of the fakt there are many pararlel tasks in the pipelin during that period the task durration will be extended, press eccept if this is ok';
+            let data1 = JSON.parse(elem.substring(1, elem.length - 1));
+
+            document.getElementById('pop_up_confirmation').style.display="block";
+            document.getElementById('c_Title').value = data1.f_Title;
+            document.getElementById('c_Category').value = data1.f_Category;
+            document.getElementById('c_Description').value = data1.f_Description;
+            document.getElementById('c_StartingTime').value = data1.f_StartingTime;
+            document.getElementById('c_Deadline').value = (data1.f_WTend).substring(0, 16); 
+            document.getElementById('c_EstimatedDuration').value = data1.f_EstimatedDuration;
+
+        } else if (C.substring(1, 3)  == '-3') {
+            let label = document.getElementById("labed_c_Deadline").innerHTML = 'New Deadline';
+            label.innerHTML = 'New Deadline';
+            document.getElementById("labed_c_Deadline").style="color:rgb(253, 180, 194); font-size: 20px";
+
+            document.getElementById("respons_to_problem").innerHTML = 'There were no openings in your scedual, wuld you like to extend the deadline to the closest posible opening?';
+            let data1 = JSON.parse(elem.substring(1, elem.length - 1));
+
+            document.getElementById('pop_up_confirmation').style.display="block";
+            document.getElementById('c_Title').value = data1.f_Title;
+            document.getElementById('c_Category').value = data1.f_Category;
+            document.getElementById('c_Description').value = data1.f_Description;
+            document.getElementById('c_StartingTime').value = (data1.f_WTstart).substring(0, 16);
+            document.getElementById('c_Deadline').value = (data1.f_WTend).substring(0, 16); 
+            document.getElementById('c_EstimatedDuration').value = data1.f_EstimatedDuration;       
+        } else if (C.substring(1, 3) == '-4') {
+            document.getElementById('Error_message').style.display = 'block';
+        }
+    });
+
+    function closeUppdateForm(e) {
+        document.getElementById('pop_up_confirmation').style.display="none";
+    }
     function CreateColumn()
     {
         let forum = document.getElementById("hiddenMenue")
@@ -119,21 +213,26 @@
         let ST = document.getElementById('f_StartingTime');
         let ET = document.getElementById('f_Deadline');
         ET.min = new Date(ST.value).toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
-        console.log(ST.min);
     }
-    function getResultes(title) {
-        let ET = document.getElementById('title');
-        if (title == "Culd not add a new task") {
-            document.getElementById("title").style.color="red";
-            console.log("hi")
-        }
-    }
+
     function Complete(id) {
-        if (document.getElementById(id).style.display=="block") {
-            document.getElementById(id).style.display="none";
-        }
-        else {
+        if (toopen == 1) {
             document.getElementById(id).style.display="block";
         }
     }
+    async function CompleteDismis(_id) {
+        console.log(_id)
+        document.getElementById(_id).style.display="none";
+        toopen = 1;
+    }
+    function capOpen(id) {
+        const capelem = document.getElementById(id);
+        if (capelem.style.display == "block") {
+            capelem.style.display="none";
+        }
+        else {
+            capelem.style.display="block";
+        }
+    }
+
 </script>

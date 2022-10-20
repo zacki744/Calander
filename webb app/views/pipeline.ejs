@@ -15,7 +15,7 @@
     <ul>
         <li><a href="/calendar/Home">Home</a></li>
         <li><a href="/calendar/pipeline">Pipeline</a></li>
-        <li><a href="/calendar/category">Export</a></li>
+        <li><a href="/calendar/Export">Export</a></li>
         <li><a href="/calendar/complete">Completed</a></li>
     </ul>
 </header>
@@ -56,6 +56,15 @@
     timeline.rowSelectedFill("#ffd54f 0.3");
     timeline.columnStroke(null);
     chart.defaultRowHeight(35);
+    chart.splitterPosition(200);
+
+    var title = chart.title();
+    title.enabled(true);
+    title.text("Tasks in the pipeline");
+    title.fontColor("#64b5f6");
+    title.fontSize(18);
+    title.fontWeight(600);
+    title.padding(5);
 
     // set the data
     chart.data(treeData);

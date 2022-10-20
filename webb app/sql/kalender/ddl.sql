@@ -275,10 +275,16 @@ CREATE PROCEDURE serch
 	Serchterm VARCHAR(45)
 )
 BEGIN
-	SELECT DATE_FORMAT(StartingTime, '%Y-%m-%d %H:%i:%s') AS 
-    start, DATE_FORMAT(Deadline, '%Y-%m-%d %H:%i:%s') AS end, 
-    Description, id, EstimatedDuration, Title, Category 
-	FROM  `kalender`.`taskManager` WHERE  Title LIKE Serchterm OR Category LIKE Serchterm OR Description LIKE Serchterm;
+	SELECT 
+    id,
+	DATE_FORMAT(Deadline, '%M-%d') AS end,
+	DATE_FORMAT(WTstart, '%m-%d') AS WTstart,
+    DATE_FORMAT(WTend, '%m-%d') AS WTend,
+    Description,
+    EstimatedDuration,
+    Title,
+    Category  
+	FROM  `kalender`.`taskManager` WHERE Title LIKE Serchterm OR Category LIKE Serchterm OR Description LIKE Serchterm OR EstimatedDuration LIKE Serchterm;
 END
 ;;
 DELIMITER ;

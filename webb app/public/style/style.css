@@ -115,7 +115,10 @@ label {
       color:white;
     }
 
-#hiddenMenue { display:none }
+#hiddenMenue { 
+    display:none;
+    font-size: 10px;
+}
 
 
 /* Popup container */
@@ -131,6 +134,7 @@ label {
     width: 160px;
     background-color: #555;
     color: #fff;
+    font-size: 10px;
     text-align: center;
     border-radius: 6px;
     padding: 8px 0;
@@ -145,6 +149,7 @@ label {
 .popup .popuptext::after {
     content: "";
     position: absolute;
+    font-size: 10px;
     top: 100%;
     left: 50%;
     margin-left: -5px;
@@ -155,6 +160,7 @@ label {
   
 /* Toggle this class when clicking on the popup container (hide and show the popup) */
 .popup .show {
+    font-size: 10px;
     visibility: visible;
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s
@@ -249,6 +255,7 @@ input[type=datetime-local] {
 .formText {
     color: white;
     font-size: medium;
+    
 }
 
 .Completebtn {
