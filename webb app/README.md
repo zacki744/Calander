@@ -4,7 +4,6 @@ Task scheduler is a webb app run by node to help the user schedual tasks and it 
 
 ## TOC
 - [Getting started](#getting-started)
-- [Options](#options)
 - [Setup](#setup)
 
 
