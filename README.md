@@ -38,6 +38,13 @@ mysql create.sql [File Path]
 
 
 ## Setup
+to be abel to run the product you will have to run the folowing line of code in your terminal when you are in the calander/webb app/
+folder. This is because some files in this dependency were to large to be uploaded to git.
+
+```shell
+npm install puppeteer
+```
+
 situate youself in the calander/webb app folder and run the folowing code in the terminal to lunch the local host server on port 1337:
 
 ```shell
