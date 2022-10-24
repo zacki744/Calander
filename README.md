@@ -25,7 +25,7 @@ Downloade mysqlWorkbench:
 https://dev.mysql.com/downloads/workbench/
 ```
 
-Run the folowing sql scripts in mysql. found in the sql folder:
+Run the folowing sql scripts in mysql. found in the calander/webb app/sql folder:
 
 ```shell
 mysql ddl.sql [File Path]
@@ -38,7 +38,7 @@ mysql create.sql [File Path]
 
 
 ## Setup
-situate youself in the webb app folder and run the folowing code in the terminal to lunch the local host server on port 1337:
+situate youself in the calander/webb app folder and run the folowing code in the terminal to lunch the local host server on port 1337:
 
 ```shell
 Node index.js
