@@ -26,12 +26,16 @@ https://dev.mysql.com/downloads/workbench/
 ```
 
 Run the folowing sql scripts in mysql. found in the sql folder:
-```shell
-mysql create.sql [File Path]
-```
+
 ```shell
 mysql ddl.sql [File Path]
 ```
+
+
+```shell
+mysql create.sql [File Path]
+```
+
 
 ## Setup
 situate youself in the webb app folder and run the folowing code in the terminal to lunch the local host server on port 1337:
